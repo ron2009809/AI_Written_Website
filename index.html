@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ron809 (Ron) · GitHub-like Profile</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="Home">
+        <svg height="32" viewBox="0 0 16 16" width="32" aria-hidden="true">
+          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </a>
+      <nav class="header-nav" aria-label="Primary">
+        <a href="#" class="nav-link">Product</a>
+        <a href="#" class="nav-link">Solutions</a>
+        <a href="#" class="nav-link">Resources</a>
+        <a href="#" class="nav-link">Open Source</a>
+        <a href="#" class="nav-link">Enterprise</a>
+      </nav>
+      <div class="header-search">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill="currentColor" d="M10.68 11.74a6 6 0 01-7.922-8.982 6 6 0 018.982 7.922l3.04 3.04a.749.749 0 11-1.06 1.06l-3.04-3.04zM11 6.5a4.499 4.499 0 10-8.997 0A4.499 4.499 0 0011 6.5z"/>
+        </svg>
+        <input type="search" placeholder="Search or jump to..." aria-label="Search" />
+        <kbd>/</kbd>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Notifications">
+          <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 16a2 2 0 001.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 008 16z"/><path fill="currentColor" d="M8 1.5A3.5 3.5 0 004.5 5v2.947c0 .516-.217.98-.586 1.31L3 10.5h10l-.914-1.243A1.75 1.75 0 0011.5 7.947V5A3.5 3.5 0 008 1.5z"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Create new">
+          <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 010 1.5H8.5v4.25a.75.75 0 01-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"/></svg>
+        </button>
+        <button class="avatar-btn" aria-label="Open user menu">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="ron809 avatar" />
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <div class="profile-layout">
+      <!-- Sidebar -->
+      <aside class="profile-sidebar">
+        <div class="avatar-wrap">
+          <img class="profile-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="Ron profile picture" />
+        </div>
+        <h1 class="profile-name">Ron</h1>
+        <p class="profile-username">ron809</p>
+        <button class="btn btn-outline follow-btn" id="followBtn">Follow</button>
+        <p class="profile-bio">First AI Written Website</p>
+
+        <ul class="profile-meta">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M1.75 2A1.75 1.75 0 000 3.75v8.5C0 13.216.784 14 1.75 14h12.5A1.75 1.75 0 0016 12.25v-8.5A1.75 1.75 0 0014.25 2H1.75z"/></svg>
+            <a href="mailto:ron809@gmail.com">ron809@gmail.com</a>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="m12.596 11.596-3.536 1.59V6.172l3.536 1.59a1 1 0 010 1.834zM5.5 5H4v6h1.5a.75.75 0 00.75-.75V5.75A.75.75 0 005.5 5zm7 1.027v4.946c0 .986-1.06 1.607-1.918 1.107L10 10.75V5.25l1.582-1.93c.858-.5 1.918.12 1.918 1.107z"/></svg>
+            <span>Singapore</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8z"/></svg>
+            <a href="#">ron809.dev</a>
+          </li>
+        </ul>
+
+        <div class="profile-stats">
+          <a href="#"><strong id="followerCount">128</strong> followers</a>
+          <span>·</span>
+          <a href="#"><strong>42</strong> following</a>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Achievements</h3>
+          <div class="achievements-grid" id="achievementsGrid">
+            <button class="achievement-badge" data-title="Pull Shark" data-desc="Merged 2 pull requests with the shark label.">
+              <span class="badge-icon shark">🦈</span>
+            </button>
+            <button class="achievement-badge" data-title="YOLO" data-desc="Merged a pull request without code review.">
+              <span class="badge-icon yolo">🎯</span>
+            </button>
+            <button class="achievement-badge" data-title="Quickdraw" data-desc="Closed an issue or pull request within 5 minutes of opening.">
+              <span class="badge-icon quick">⚡</span>
+            </button>
+            <button class="achievement-badge" data-title="Starstruck" data-desc="Created a repository that has 16+ stars.">
+              <span class="badge-icon star">⭐</span>
+            </button>
+            <button class="achievement-badge" data-title="Pair Extraordinaire" data-desc="Co-authored commits on merged pull requests.">
+              <span class="badge-icon pair">🤝</span>
+            </button>
+            <button class="achievement-badge" data-title="Public Sponsor" data-desc="Sponsoring open source projects.">
+              <span class="badge-icon sponsor">💜</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Organizations</h3>
+          <div class="org-list">
+            <a href="#" class="org-badge" title="AI Builders">AI</a>
+            <a href="#" class="org-badge" title="Singapore Devs">SG</a>
+            <a href="#" class="org-badge" title="Open Source">OS</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <section class="profile-main">
+        <nav class="profile-tabs" aria-label="Profile sections">
+          <a href="#" class="tab active" data-tab="overview">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0114.25 16H1.75A1.75 1.75 0 010 14.25V1.75C0 .784.784 0 1.75 0z"/></svg>
+            Overview
+          </a>
+          <a href="#" class="tab" data-tab="repositories">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9z"/></svg>
+            Repositories
+            <span class="tab-count">12</span>
+          </a>
+          <a href="#" class="tab" data-tab="projects">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0114.25 16H1.75A1.75 1.75 0 010 14.25V1.75C0 .784.784 0 1.75 0z"/></svg>
+            Projects
+            <span class="tab-count">4</span>
+          </a>
+          <a href="#" class="tab" data-tab="packages">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8.878.392 5.25 4.147l3.628 3.755a.75.75 0 01-.22 1.213l-4.5 2.25a.75.75 0 01-.928-.928l2.25-4.5a.75.75 0 011.213-.22z"/></svg>
+            Packages
+          </a>
+          <a href="#" class="tab" data-tab="stars">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+            Stars
+            <span class="tab-count">28</span>
+          </a>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div class="tab-panel active" id="panel-overview">
+          <div class="pinned-section">
+            <h2>Pinned</h2>
+            <div class="repo-grid">
+              <article class="repo-card">
+                <div class="repo-header">
+                  <a href="#" class="repo-name">rag-app</a>
+                  <button class="star-btn" aria-label="Star rag-app">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+                    Star
+                  </button>
+                </div>
+                <p class="repo-desc">Retrieval-Augmented Generation pipeline with vector search and LLM integration.</p>
+                <div class="repo-meta">
+                  <span class="lang"><span class="lang-dot python"></span> Python</span>
+                  <span>★ 24</span>
+                </div>
+              </article>
+              <article class="repo-card">
+                <div class="repo-header">
+                  <a href="#" class="repo-name">ai-portfolio</a>
+                  <button class="star-btn" aria-label="Star ai-portfolio">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+                    Star
+                  </button>
+                </div>
+                <p class="repo-desc">Personal portfolio site — first AI written website, built with clean modern design.</p>
+                <div class="repo-meta">
+                  <span class="lang"><span class="lang-dot html"></span> HTML</span>
+                  <span>★ 16</span>
+                </div>
+              </article>
+              <article class="repo-card">
+                <div class="repo-header">
+                  <a href="#" class="repo-name">ml-toolkit</a>
+                  <button class="star-btn" aria-label="Star ml-toolkit">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+                    Star
+                  </button>
+                </div>
+                <p class="repo-desc">Collection of machine learning utilities for data preprocessing and model training.</p>
+                <div class="repo-meta">
+                  <span class="lang"><span class="lang-dot python"></span> Python</span>
+                  <span>★ 9</span>
+                </div>
+              </article>
+              <article class="repo-card">
+                <div class="repo-header">
+                  <a href="#" class="repo-name">chat-api</a>
+                  <button class="star-btn" aria-label="Star chat-api">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.751.751 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+                    Star
+                  </button>
+                </div>
+                <p class="repo-desc">RESTful API for real-time chat with WebSocket support and authentication.</p>
+                <div class="repo-meta">
+                  <span class="lang"><span class="lang-dot js"></span> JavaScript</span>
+                  <span>★ 7</span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="activity-section">
+            <h2>
+              <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M1.643 3.143 1.5 2.5 2.5 1.5l.143.643L2.5 2.5l.643-.357zm12.357 0L14.5 2.5 13.5 1.5l-.143.643L13.5 2.5l-.643-.357z"/></svg>
+              Recent activity
+            </h2>
+            <div class="activity-feed" id="activityFeed">
+              <div class="activity-item">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="" class="activity-avatar" />
+                <div class="activity-body">
+                  <p><strong>ron809</strong> pushed to <a href="#">main</a> at <a href="#">rag-app</a></p>
+                  <code class="commit-msg">feat: add vector store indexing pipeline</code>
+                  <time>2 hours ago</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="" class="activity-avatar" />
+                <div class="activity-body">
+                  <p><strong>ron809</strong> starred <a href="#">langchain-ai/langchain</a></p>
+                  <time>5 hours ago</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="" class="activity-avatar" />
+                <div class="activity-body">
+                  <p><strong>ron809</strong> opened pull request <a href="#">#42</a> in <a href="#">ai-portfolio</a></p>
+                  <code class="commit-msg">Add responsive navigation and dark mode toggle</code>
+                  <time>Yesterday</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="" class="activity-avatar" />
+                <div class="activity-body">
+                  <p><strong>ron809</strong> created repository <a href="#">chat-api</a></p>
+                  <time>2 days ago</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ron809" alt="" class="activity-avatar" />
+                <div class="activity-body">
+                  <p><strong>ron809</strong> earned achievement <button class="inline-badge" data-title="Starstruck">⭐ Starstruck</button></p>
+                  <time>3 days ago</time>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline load-more" id="loadMoreActivity">Show more activity</button>
+          </div>
+
+          <div class="contribution-section">
+            <h2>Contributions in the last year</h2>
+            <div class="contribution-graph" id="contributionGraph" aria-label="Contribution graph"></div>
+            <p class="contribution-legend">
+              <span>Less</span>
+              <span class="level level-0"></span>
+              <span class="level level-1"></span>
+              <span class="level level-2"></span>
+              <span class="level level-3"></span>
+              <span class="level level-4"></span>
+              <span>More</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Repositories Tab -->
+        <div class="tab-panel" id="panel-repositories">
+          <div class="panel-toolbar">
+            <input type="search" class="repo-search" placeholder="Find a repository..." />
+            <select class="repo-filter">
+              <option>Type: All</option>
+              <option>Public</option>
+              <option>Private</option>
+            </select>
+            <select class="repo-filter">
+              <option>Sort: Last updated</option>
+              <option>Stars</option>
+              <option>Name</option>
+            </select>
+            <button class="btn btn-primary">New</button>
+          </div>
+          <div class="repo-list" id="repoList"></div>
+        </div>
+
+        <!-- Projects Tab -->
+        <div class="tab-panel" id="panel-projects">
+          <div class="project-grid">
+            <article class="project-card">
+              <h3><a href="#">AI Portfolio Redesign</a></h3>
+              <p>Complete redesign of personal portfolio with GitHub-inspired layout and interactive features.</p>
+              <span class="project-tag">In progress</span>
+            </article>
+            <article class="project-card">
+              <h3><a href="#">RAG Pipeline v2</a></h3>
+              <p>Next-generation retrieval pipeline with hybrid search and reranking.</p>
+              <span class="project-tag done">Completed</span>
+            </article>
+            <article class="project-card">
+              <h3><a href="#">Dev Community Hub</a></h3>
+              <p>Platform for Singapore developers to share knowledge and collaborate.</p>
+              <span class="project-tag">Planning</span>
+            </article>
+            <article class="project-card">
+              <h3><a href="#">Open Source Docs</a></h3>
+              <p>Documentation site generator for open source projects.</p>
+              <span class="project-tag done">Completed</span>
+            </article>
+          </div>
+        </div>
+
+        <!-- Packages Tab -->
+        <div class="tab-panel" id="panel-packages">
+          <div class="empty-state">
+            <svg width="48" height="48" viewBox="0 0 16 16"><path fill="currentColor" opacity="0.4" d="M8.878.392 5.25 4.147l3.628 3.755a.75.75 0 01-.22 1.213l-4.5 2.25a.75.75 0 01-.928-.928l2.25-4.5a.75.75 0 011.213-.22z"/></svg>
+            <h3>No packages published</h3>
+            <p>When you publish packages, they'll appear here.</p>
+            <button class="btn btn-primary">Publish your first package</button>
+          </div>
+        </div>
+
+        <!-- Stars Tab -->
+        <div class="tab-panel" id="panel-stars">
+          <div class="starred-list" id="starredList"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Achievement tooltip -->
+  <div class="tooltip" id="achievementTooltip" role="tooltip" hidden>
+    <strong id="tooltipTitle"></strong>
+    <span id="tooltipDesc"></span>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <footer class="site-footer">
+    <p>© 2026 Ron (ron809) · Built as a GitHub-like personal profile · Singapore</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
