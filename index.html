@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="ConnectHub - Modern social media platform" />
+  <meta name="theme-color" content="#6366f1" />
+  <title>ConnectHub</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="screen active">
+    <div class="auth-container">
+      <div class="auth-brand">
+        <div class="brand-icon">◉</div>
+        <h1 id="brand-name">ConnectHub</h1>
+        <p class="auth-tagline">Share moments. Connect worldwide.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth="login" id="tab-login">Log In</button>
+        <button class="auth-tab" data-auth="signup" id="tab-signup">Sign Up</button>
+      </div>
+
+      <form id="login-form" class="auth-form active">
+        <div class="field">
+          <label for="login-id">Email or Username</label>
+          <input type="text" id="login-id" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" autocomplete="current-password" required />
+        </div>
+        <p class="demo-hint" id="demo-hint"></p>
+        <button type="submit" class="btn btn-primary btn-block" id="login-btn">Log In</button>
+      </form>
+
+      <form id="signup-form" class="auth-form">
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="signup-name">Full Name</label>
+          <input type="text" id="signup-name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="signup-username">Username</label>
+          <input type="text" id="signup-username" autocomplete="username" pattern="[a-zA-Z0-9_]{3,20}" required />
+        </div>
+        <div class="field">
+          <label for="signup-phone">Phone Number</label>
+          <input type="tel" id="signup-phone" autocomplete="tel" required />
+        </div>
+        <div class="field">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" autocomplete="new-password" minlength="6" required />
+        </div>
+        <div class="field">
+          <label for="signup-confirm">Confirm Password</label>
+          <input type="password" id="signup-confirm" autocomplete="new-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="signup-btn">Create Account</button>
+      </form>
+      <p class="auth-error" id="auth-error" hidden></p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-screen" class="screen">
+    <header class="app-header" id="app-header">
+      <h2 class="page-title" id="page-title">Home</h2>
+      <div class="header-actions" id="header-actions"></div>
+    </header>
+
+    <main class="app-main" id="app-main">
+      <!-- Home -->
+      <section id="page-home" class="page active">
+        <div id="home-feed" class="feed"></div>
+      </section>
+
+      <!-- Search overlay -->
+      <div id="search-overlay" class="overlay" hidden>
+        <div class="overlay-header">
+          <input type="search" id="search-input" placeholder="Search..." />
+          <button class="icon-btn" id="search-close" aria-label="Close">✕</button>
+        </div>
+        <div id="search-results" class="search-results"></div>
+      </div>
+
+      <!-- Friends -->
+      <section id="page-friends" class="page">
+        <div id="friends-stories" class="stories-row"></div>
+        <div id="friends-feed" class="feed"></div>
+      </section>
+
+      <!-- Upload -->
+      <section id="page-upload" class="page">
+        <div class="upload-panel">
+          <h3 id="upload-title">Upload Photo or Video</h3>
+          <div class="upload-preview" id="upload-preview">
+            <span class="upload-placeholder">📷</span>
+          </div>
+          <input type="file" id="upload-file" accept="image/*,video/*" hidden />
+          <button class="btn btn-outline" id="select-file-btn">Select from device</button>
+          <div class="field">
+            <label for="upload-caption">Caption</label>
+            <textarea id="upload-caption" rows="3" placeholder="Write a caption..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" id="publish-btn" disabled>Publish</button>
+        </div>
+      </section>
+
+      <!-- Messages -->
+      <section id="page-messages" class="page">
+        <div class="msg-stories" id="msg-stories"></div>
+        <div class="msg-section">
+          <h3 id="notif-title">Notifications</h3>
+          <div id="notifications-list" class="notifications-list"></div>
+        </div>
+        <div class="msg-section">
+          <h3>Messages</h3>
+          <div id="conversations-list" class="conversations-list"></div>
+        </div>
+      </section>
+
+      <!-- Chat -->
+      <div id="chat-overlay" class="overlay chat-overlay" hidden>
+        <div class="chat-header">
+          <button class="icon-btn" id="chat-back">←</button>
+          <img id="chat-avatar" src="" alt="" class="chat-avatar" />
+          <span id="chat-name"></span>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-bar">
+          <input type="text" id="chat-input" placeholder="Type a message..." />
+          <button class="btn btn-primary" id="chat-send">Send</button>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <section id="page-profile" class="page">
+        <div class="profile-header-bar">
+          <button class="icon-btn" id="btn-views" title="Profile views">👣</button>
+          <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
+        </div>
+        <div class="profile-cover" id="profile-cover">
+          <label class="cover-upload" for="cover-input">+</label>
+          <input type="file" id="cover-input" accept="image/*" hidden />
+        </div>
+        <div class="profile-info">
+          <div class="profile-avatar-wrap">
+            <img id="profile-avatar" src="" alt="" class="profile-avatar-img" />
+            <label class="avatar-upload" for="avatar-input">📷</label>
+            <input type="file" id="avatar-input" accept="image/*" hidden />
+          </div>
+          <h2 id="profile-name"></h2>
+          <p id="profile-username" class="muted"></p>
+          <p id="profile-bio"></p>
+          <div class="profile-stats">
+            <div><strong id="stat-posts">0</strong> <span data-i18n="posts">Posts</span></div>
+            <div><strong id="stat-followers">0</strong> <span data-i18n="followers">Followers</span></div>
+            <div><strong id="stat-following">0</strong> <span data-i18n="followingLabel">Following</span></div>
+            <div><strong id="stat-likes">0</strong> <span data-i18n="totalLikes">Total Likes</span></div>
+          </div>
+          <button class="btn btn-outline" id="edit-profile-btn">Edit Profile</button>
+        </div>
+        <div class="profile-tabs">
+          <button class="profile-tab active" data-ptab="posts">📋</button>
+          <button class="profile-tab" data-ptab="liked">❤</button>
+          <button class="profile-tab" data-ptab="saved">🔖</button>
+        </div>
+        <div id="profile-grid" class="profile-grid"></div>
+      </section>
+
+      <!-- User profile (other users) -->
+      <div id="user-profile-overlay" class="overlay" hidden>
+        <div class="overlay-header">
+          <button class="icon-btn" id="user-profile-back">←</button>
+          <span id="user-profile-title"></span>
+        </div>
+        <div id="user-profile-content"></div>
+      </div>
+
+      <!-- Story viewer -->
+      <div id="story-overlay" class="overlay story-overlay" hidden>
+        <button class="icon-btn story-close" id="story-close">✕</button>
+        <img id="story-image" src="" alt="Story" />
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-item active" data-page="home" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span data-i18n="home">Home</span>
+      </button>
+      <button class="nav-item" data-page="friends" aria-label="Friends">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <span data-i18n="friends">Friends</span>
+      </button>
+      <button class="nav-item nav-upload" data-page="upload" aria-label="Upload">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span data-i18n="upload">Upload</span>
+      </button>
+      <button class="nav-item" data-page="messages" aria-label="Messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span data-i18n="messages">Messages</span>
+        <span class="badge" id="msg-badge" hidden>0</span>
+      </button>
+      <button class="nav-item" data-page="profile" aria-label="Profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span data-i18n="profile">Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal-overlay" class="modal-overlay" hidden>
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
