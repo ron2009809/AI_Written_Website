@@ -35,7 +35,6 @@
           <label for="login-password">Password</label>
           <input type="password" id="login-password" autocomplete="current-password" required />
         </div>
-        <p class="demo-hint" id="demo-hint"></p>
         <button type="submit" class="btn btn-primary btn-block" id="login-btn">Log In</button>
       </form>
 
@@ -64,9 +63,11 @@
           <label for="signup-confirm">Confirm Password</label>
           <input type="password" id="signup-confirm" autocomplete="new-password" required />
         </div>
+        <p class="signup-notice" id="signup-notice"></p>
         <button type="submit" class="btn btn-primary btn-block" id="signup-btn">Create Account</button>
       </form>
       <p class="auth-error" id="auth-error" hidden></p>
+      <p class="auth-success" id="auth-success" hidden></p>
     </div>
   </div>
 
@@ -119,11 +120,18 @@
       <section id="page-messages" class="page">
         <div class="msg-stories" id="msg-stories"></div>
         <div class="msg-section">
-          <h3 id="notif-title">Notifications</h3>
-          <div id="notifications-list" class="notifications-list"></div>
+          <button class="notif-bar" id="notif-bar" type="button">
+            <span class="notif-bar-icon">🔔</span>
+            <span class="notif-bar-text" id="notif-bar-text">Notifications</span>
+            <span class="notif-bar-preview" id="notif-bar-preview"></span>
+            <span class="notif-bar-arrow" id="notif-bar-arrow">›</span>
+          </button>
+          <div id="notifications-panel" class="notifications-panel" hidden>
+            <div id="notifications-list" class="notifications-list"></div>
+          </div>
         </div>
         <div class="msg-section">
-          <h3>Messages</h3>
+          <h3 id="messages-heading">Messages</h3>
           <div id="conversations-list" class="conversations-list"></div>
         </div>
       </section>
@@ -143,13 +151,13 @@
       </div>
 
       <!-- Profile -->
-      <section id="page-profile" class="page">
+      <section id="page-profile" class="page profile-page">
         <div class="profile-header-bar">
           <button class="icon-btn" id="btn-views" title="Profile views">👣</button>
           <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
         </div>
         <div class="profile-cover" id="profile-cover">
-          <label class="cover-upload" for="cover-input">+</label>
+          <button type="button" class="cover-upload" id="cover-upload-btn" aria-label="Change cover">+</button>
           <input type="file" id="cover-input" accept="image/*" hidden />
         </div>
         <div class="profile-info">
@@ -163,18 +171,21 @@
           <p id="profile-bio"></p>
           <div class="profile-stats">
             <div><strong id="stat-posts">0</strong> <span data-i18n="posts">Posts</span></div>
-            <div><strong id="stat-followers">0</strong> <span data-i18n="followers">Followers</span></div>
-            <div><strong id="stat-following">0</strong> <span data-i18n="followingLabel">Following</span></div>
+            <button type="button" class="stat-btn" id="stat-followers-btn"><strong id="stat-followers">0</strong> <span data-i18n="followers">Followers</span></button>
+            <button type="button" class="stat-btn" id="stat-following-btn"><strong id="stat-following">0</strong> <span data-i18n="followingLabel">Following</span></button>
             <div><strong id="stat-likes">0</strong> <span data-i18n="totalLikes">Total Likes</span></div>
           </div>
           <button class="btn btn-outline" id="edit-profile-btn">Edit Profile</button>
         </div>
         <div class="profile-tabs">
-          <button class="profile-tab active" data-ptab="posts">📋</button>
-          <button class="profile-tab" data-ptab="liked">❤</button>
-          <button class="profile-tab" data-ptab="saved">🔖</button>
+          <button class="profile-tab active" data-ptab="posts"><span data-i18n="myPosts">My Posts</span></button>
+          <button class="profile-tab" data-ptab="saved"><span data-i18n="savedPosts">Saved Posts</span></button>
+          <button class="profile-tab" data-ptab="liked"><span data-i18n="likedPosts">Liked Posts</span></button>
         </div>
-        <div id="profile-grid" class="profile-grid"></div>
+        <div class="profile-content">
+          <div id="profile-grid" class="profile-grid"></div>
+          <div id="profile-post-detail" class="profile-post-detail" hidden></div>
+        </div>
       </section>
 
       <!-- User profile (other users) -->

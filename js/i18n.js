@@ -24,7 +24,11 @@ const I18N = {
     passwordMismatch: 'Passwords do not match', demoHint: 'Demo: alexm / demo1234 or sign up new account',
     privatePostHidden: 'Follow to see posts', noPosts: 'No posts yet', noMessages: 'No messages yet',
     uploadSuccess: 'Posted successfully!', friendsFeed: 'Friends & Stories', allPosts: 'All Posts',
-    lockDesc: 'Only followers can see your posts', logout: 'Log Out'
+    lockDesc: 'Only followers can see your posts', followRequestDesc: 'Other users need to request to follow you',
+    logout: 'Log Out', myPosts: 'My Posts', savedPosts: 'Saved Posts', likedPosts: 'Liked Posts',
+    signupVerifyNotice: 'Please make sure your email address and phone number are correct and valid before creating your account.',
+    signupSuccess: 'Account created! Please log in with your credentials.',
+    signupConfirm: 'Create account with this email and phone number?'
   },
   zh: {
     appName: 'ConnectHub', login: '登录', signup: '注册', email: '邮箱', name: '姓名',
@@ -51,7 +55,11 @@ const I18N = {
     passwordMismatch: '密码不匹配', demoHint: '演示：alexm / demo1234 或注册新账户',
     privatePostHidden: '关注后可查看帖子', noPosts: '暂无帖子', noMessages: '暂无消息',
     uploadSuccess: '发布成功！', friendsFeed: '好友与动态', allPosts: '全部帖子',
-    lockDesc: '仅粉丝可见你的帖子', logout: '退出登录'
+    lockDesc: '仅粉丝可见你的帖子', followRequestDesc: '其他用户需要请求才能关注你',
+    logout: '退出登录', myPosts: '我的帖子', savedPosts: '收藏', likedPosts: '喜欢',
+    signupVerifyNotice: '创建账户前，请确保您的邮箱和电话号码正确有效。',
+    signupSuccess: '账户已创建！请使用您的凭据登录。',
+    signupConfirm: '使用此邮箱和电话号码创建账户？'
   },
   ko: {
     appName: 'ConnectHub', login: '로그인', signup: '가입', email: '이메일', name: '이름',
@@ -77,7 +85,11 @@ const I18N = {
     emailTaken: '이미 등록된 이메일', usernameTaken: '사용 중인 사용자명', passwordMismatch: '비밀번호 불일치',
     demoHint: '데모: alexm / demo1234', privatePostHidden: '팔로우 후 게시물 확인', noPosts: '게시물 없음',
     noMessages: '메시지 없음', uploadSuccess: '게시 완료!', friendsFeed: '친구 & 스토리', allPosts: '전체 게시물',
-    lockDesc: '팔로워만 게시물 확인 가능', logout: '로그아웃'
+    lockDesc: '팔로워만 게시물 확인 가능', followRequestDesc: '다른 사용자는 팔로우 요청이 필요합니다',
+    logout: '로그아웃', myPosts: '내 게시물', savedPosts: '저장됨', likedPosts: '좋아요',
+    signupVerifyNotice: '계정 생성 전 이메일과 전화번호가 올바른지 확인하세요.',
+    signupSuccess: '계정이 생성되었습니다! 로그인해 주세요.',
+    signupConfirm: '이 이메일과 전화번호로 계정을 만드시겠습니까?'
   },
   ja: {
     appName: 'ConnectHub', login: 'ログイン', signup: '登録', email: 'メール', name: '名前',
@@ -103,7 +115,11 @@ const I18N = {
     emailTaken: 'メール登録済', usernameTaken: 'ユーザー名使用中', passwordMismatch: 'パスワード不一致',
     demoHint: 'デモ: alexm / demo1234', privatePostHidden: 'フォロー後に表示', noPosts: '投稿なし',
     noMessages: 'メッセージなし', uploadSuccess: '投稿完了！', friendsFeed: '友達＆ストーリー', allPosts: 'すべての投稿',
-    lockDesc: 'フォロワーのみ閲覧可', logout: 'ログアウト'
+    lockDesc: 'フォロワーのみ閲覧可', followRequestDesc: '他のユーザーはフォローリクエストが必要です',
+    logout: 'ログアウト', myPosts: '自分の投稿', savedPosts: '保存', likedPosts: 'いいね',
+    signupVerifyNotice: 'アカウント作成前に、メールと電話番号が正しいか確認してください。',
+    signupSuccess: 'アカウントが作成されました！ログインしてください。',
+    signupConfirm: 'このメールと電話番号でアカウントを作成しますか？'
   },
   es: {
     appName: 'ConnectHub', login: 'Iniciar sesión', signup: 'Registrarse', email: 'Correo', name: 'Nombre',
@@ -129,7 +145,11 @@ const I18N = {
     emailTaken: 'Correo registrado', usernameTaken: 'Usuario en uso', passwordMismatch: 'Contraseñas no coinciden',
     demoHint: 'Demo: alexm / demo1234', privatePostHidden: 'Sigue para ver publicaciones', noPosts: 'Sin publicaciones',
     noMessages: 'Sin mensajes', uploadSuccess: '¡Publicado!', friendsFeed: 'Amigos e historias', allPosts: 'Todas',
-    lockDesc: 'Solo seguidores ven tus posts', logout: 'Cerrar sesión'
+    lockDesc: 'Solo seguidores ven tus posts', followRequestDesc: 'Otros usuarios deben solicitar seguirte',
+    logout: 'Cerrar sesión', myPosts: 'Mis publicaciones', savedPosts: 'Guardados', likedPosts: 'Me gusta',
+    signupVerifyNotice: 'Asegúrate de que tu correo y teléfono sean correctos antes de crear tu cuenta.',
+    signupSuccess: '¡Cuenta creada! Inicia sesión con tus credenciales.',
+    signupConfirm: '¿Crear cuenta con este correo y teléfono?'
   },
   fr: {
     appName: 'ConnectHub', login: 'Connexion', signup: 'Inscription', email: 'E-mail', name: 'Nom',
@@ -155,7 +175,11 @@ const I18N = {
     emailTaken: 'E-mail déjà utilisé', usernameTaken: "Nom d'utilisateur pris", passwordMismatch: 'Mots de passe différents',
     demoHint: 'Démo : alexm / demo1234', privatePostHidden: 'Suivez pour voir les posts', noPosts: 'Aucune publication',
     noMessages: 'Aucun message', uploadSuccess: 'Publié !', friendsFeed: 'Amis & stories', allPosts: 'Toutes',
-    lockDesc: 'Seuls les abonnés voient vos posts', logout: 'Déconnexion'
+    lockDesc: 'Seuls les abonnés voient vos posts', followRequestDesc: 'Les autres utilisateurs doivent demander à vous suivre',
+    logout: 'Déconnexion', myPosts: 'Mes publications', savedPosts: 'Enregistrés', likedPosts: 'Aimés',
+    signupVerifyNotice: 'Vérifiez que votre e-mail et téléphone sont corrects avant de créer votre compte.',
+    signupSuccess: 'Compte créé ! Connectez-vous avec vos identifiants.',
+    signupConfirm: 'Créer un compte avec cet e-mail et ce téléphone ?'
   }
 };
 

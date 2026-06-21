@@ -8,7 +8,9 @@ const App = {
     chatPartner: null,
     uploadData: null,
     profileTab: 'posts',
-    viewingUserId: null
+    viewingUserId: null,
+    selectedPostId: null,
+    notifPanelOpen: false
   },
 
   init() {
@@ -55,11 +57,14 @@ const App = {
     document.getElementById('tab-signup').textContent = t('signup');
     document.getElementById('login-btn').textContent = t('loginBtn');
     document.getElementById('signup-btn').textContent = t('signupBtn');
-    document.getElementById('demo-hint').textContent = t('demoHint');
+    const signupNotice = document.getElementById('signup-notice');
+    if (signupNotice) signupNotice.textContent = t('signupVerifyNotice');
     document.getElementById('upload-title').textContent = t('uploadMedia');
     document.getElementById('select-file-btn').textContent = t('selectFile');
     document.getElementById('publish-btn').textContent = t('publish');
-    document.getElementById('notif-title').textContent = t('notifications');
+    document.getElementById('notif-bar-text').textContent = t('notifications');
+    const msgHeading = document.getElementById('messages-heading');
+    if (msgHeading) msgHeading.textContent = t('messages');
     document.getElementById('edit-profile-btn').textContent = t('editProfile');
     document.getElementById('search-input').placeholder = t('search');
     document.getElementById('chat-input').placeholder = t('typeMessage');
@@ -76,12 +81,14 @@ const App = {
 
   bindEvents() {
     document.querySelectorAll('.auth-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
+        tab.addEventListener('click', () => {
         document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
         tab.classList.add('active');
         document.getElementById(tab.dataset.auth + '-form').classList.add('active');
         document.getElementById('auth-error').hidden = true;
+        const success = document.getElementById('auth-success');
+        if (success) success.hidden = true;
       });
     });
 
@@ -110,21 +117,29 @@ const App = {
       const username = document.getElementById('signup-username').value.trim();
       const phone = document.getElementById('signup-phone').value.trim();
       const password = document.getElementById('signup-password').value;
-      const confirm = document.getElementById('signup-confirm').value;
+      const confirmPw = document.getElementById('signup-confirm').value;
       if (!email || !name || !username || !phone || !password) {
         this.showAuthError(t('signupError'));
         return;
       }
-      if (password !== confirm) {
+      if (password !== confirmPw) {
         this.showAuthError(t('passwordMismatch'));
         return;
       }
+      if (!window.confirm(t('signupConfirm') + '\n\n' + t('signupVerifyNotice'))) return;
+
       const result = DB.createUser({ email, name, username, phone, password });
       if (result.error === 'email_taken') { this.showAuthError(t('emailTaken')); return; }
       if (result.error === 'username_taken') { this.showAuthError(t('usernameTaken')); return; }
-      DB.setCurrentUser(result.user.id);
-      this.state.user = result.user;
-      this.showApp();
+
+      document.getElementById('signup-form').reset();
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      document.getElementById('tab-login').classList.add('active');
+      document.getElementById('login-form').classList.add('active');
+      document.getElementById('login-id').value = username;
+      document.getElementById('login-password').value = '';
+      this.showAuthSuccess(t('signupSuccess'));
     });
 
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -196,13 +211,22 @@ const App = {
     document.getElementById('btn-views').addEventListener('click', () => this.showProfileViews());
 
     document.getElementById('avatar-input').addEventListener('change', e => this.handleImageUpload(e, 'avatar'));
+    document.getElementById('cover-upload-btn').addEventListener('click', () => {
+      document.getElementById('cover-input').click();
+    });
     document.getElementById('cover-input').addEventListener('change', e => this.handleImageUpload(e, 'coverImage'));
+
+    document.getElementById('stat-followers-btn').addEventListener('click', () => this.showFollowList('followers'));
+    document.getElementById('stat-following-btn').addEventListener('click', () => this.showFollowList('following'));
+
+    document.getElementById('notif-bar').addEventListener('click', () => this.toggleNotificationsPanel());
 
     document.querySelectorAll('.profile-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         this.state.profileTab = tab.dataset.ptab;
+        this.state.selectedPostId = null;
         this.renderProfileGrid();
       });
     });
@@ -224,6 +248,16 @@ const App = {
     const el = document.getElementById('auth-error');
     el.textContent = msg;
     el.hidden = false;
+    const success = document.getElementById('auth-success');
+    if (success) success.hidden = true;
+  },
+
+  showAuthSuccess(msg) {
+    const el = document.getElementById('auth-success');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    document.getElementById('auth-error').hidden = true;
   },
 
   renderPage(page) {
@@ -297,6 +331,15 @@ const App = {
     });
 
     const notifs = DB.getNotifications(this.state.user.id);
+    const preview = notifs[0];
+    const previewEl = document.getElementById('notif-bar-preview');
+    if (preview) {
+      const from = DB.getUser(preview.fromUserId);
+      previewEl.textContent = `${from?.username || ''} · ${this.timeAgo(preview.createdAt)}`;
+    } else {
+      previewEl.textContent = t('noResults');
+    }
+
     document.getElementById('notifications-list').innerHTML = notifs.slice(0, 20).map(n => {
       const from = DB.getUser(n.fromUserId);
       let text = '';
@@ -309,14 +352,17 @@ const App = {
     }).join('') || `<div class="empty">${t('noResults')}</div>`;
 
     document.querySelectorAll('.accept-req').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
         DB.acceptFollowRequest(this.state.user.id, btn.dataset.user);
         this.renderMessagesPage();
         this.toast(t('acceptedFollow'));
       });
     });
 
-    DB.markNotificationsRead(this.state.user.id);
+    if (this.state.notifPanelOpen) {
+      DB.markNotificationsRead(this.state.user.id);
+    }
 
     const convos = DB.getConversations(this.state.user.id);
     document.getElementById('conversations-list').innerHTML = convos.map(c => `
@@ -334,6 +380,18 @@ const App = {
     });
 
     this.updateMsgBadge();
+  },
+
+  toggleNotificationsPanel() {
+    this.state.notifPanelOpen = !this.state.notifPanelOpen;
+    const panel = document.getElementById('notifications-panel');
+    const bar = document.getElementById('notif-bar');
+    panel.hidden = !this.state.notifPanelOpen;
+    bar.classList.toggle('open', this.state.notifPanelOpen);
+    if (this.state.notifPanelOpen) {
+      DB.markNotificationsRead(this.state.user.id);
+      this.renderMessagesPage();
+    }
   },
 
   openChat(partnerId) {
@@ -396,14 +454,43 @@ const App = {
     const user = this.state.user;
     let items = [];
     if (this.state.profileTab === 'posts') items = DB.getPosts(p => p.userId === user.id);
-    else if (this.state.profileTab === 'liked') items = DB.getLikedPosts(user.id);
-    else items = DB.getSavedPosts(user.id);
+    else if (this.state.profileTab === 'saved') items = DB.getSavedPosts(user.id);
+    else items = DB.getLikedPosts(user.id);
 
-    document.getElementById('profile-grid').innerHTML = items.length
-      ? items.map(p => `<div class="grid-item" data-post="${p.id}">
-          ${p.type === 'video' ? `<video src="${p.mediaUrl}" muted></video>` : `<img src="${p.mediaUrl}" alt="" />`}
-        </div>`).join('')
-      : `<div class="empty">${t('noPosts')}</div>`;
+    const grid = document.getElementById('profile-grid');
+    const detail = document.getElementById('profile-post-detail');
+    const content = document.querySelector('.profile-content');
+
+    if (!items.length) {
+      grid.innerHTML = `<div class="empty">${t('noPosts')}</div>`;
+      detail.hidden = true;
+      content?.classList.remove('has-detail');
+      return;
+    }
+
+    grid.innerHTML = items.map(p => `<button type="button" class="grid-item ${this.state.selectedPostId === p.id ? 'active' : ''}" data-post="${p.id}">
+        ${p.type === 'video' ? `<video src="${p.mediaUrl}" muted></video>` : `<img src="${p.mediaUrl}" alt="" />`}
+      </button>`).join('');
+
+    grid.querySelectorAll('.grid-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.state.selectedPostId = btn.dataset.post;
+        this.renderProfileGrid();
+      });
+    });
+
+    if (this.state.selectedPostId) {
+      const post = items.find(p => p.id === this.state.selectedPostId) || items[0];
+      if (post) {
+        detail.hidden = false;
+        detail.innerHTML = this.renderPostCard(post);
+        content?.classList.add('has-detail');
+        this.bindPostEvents(detail);
+      }
+    } else {
+      detail.hidden = true;
+      content?.classList.remove('has-detail');
+    }
   },
 
   renderPostCard(post) {
@@ -456,7 +543,8 @@ const App = {
     container.querySelectorAll('.like-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         DB.toggleLike(btn.dataset.like, this.state.user.id);
-        this.renderPage(this.state.page);
+        if (this.state.page === 'profile') this.renderProfileGrid();
+        else this.renderPage(this.state.page);
       });
     });
 
@@ -475,7 +563,8 @@ const App = {
     container.querySelectorAll('.save-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         DB.toggleSavePost(this.state.user.id, btn.dataset.save);
-        this.renderPage(this.state.page);
+        if (this.state.page === 'profile') this.renderProfileGrid();
+        else this.renderPage(this.state.page);
       });
     });
 
@@ -485,10 +574,15 @@ const App = {
 
     container.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (confirm(t('delete') + '?')) {
+        if (window.confirm(t('delete') + '?')) {
           DB.deletePost(btn.dataset.delete, this.state.user.id);
           this.toast(t('postDeleted'));
-          this.renderPage(this.state.page);
+          if (this.state.selectedPostId === btn.dataset.delete) this.state.selectedPostId = null;
+          if (this.state.page === 'profile') {
+            this.renderProfilePage();
+          } else {
+            this.renderPage(this.state.page);
+          }
         }
       });
     });
@@ -505,18 +599,19 @@ const App = {
 
   showCommentModal(postId) {
     this.showModal(`
-      <h3>${t('comment')}</h3>
       <textarea id="modal-comment" rows="3" placeholder="${t('comment')}..."></textarea>
       <div class="modal-actions">
-        <button class="btn btn-outline" onclick="App.closeModal()">${t('cancel')}</button>
-        <button class="btn btn-primary" id="submit-comment">${t('send')}</button>
-      </div>`);
+        <button type="button" class="btn btn-outline" id="modal-cancel-comment">${t('cancel')}</button>
+        <button type="button" class="btn btn-primary" id="submit-comment">${t('send')}</button>
+      </div>`, t('comment'));
+    document.getElementById('modal-cancel-comment').addEventListener('click', () => this.closeModal());
     document.getElementById('submit-comment').addEventListener('click', () => {
       const text = document.getElementById('modal-comment').value.trim();
       if (text) {
         DB.addComment(postId, this.state.user.id, text);
         this.closeModal();
-        this.renderPage(this.state.page);
+        if (this.state.page === 'profile') this.renderProfileGrid();
+        else this.renderPage(this.state.page);
       }
     });
   },
@@ -524,17 +619,18 @@ const App = {
   showEditCaption(postId) {
     const post = DB.getDB().posts.find(p => p.id === postId);
     this.showModal(`
-      <h3>${t('editCaption')}</h3>
       <textarea id="modal-caption" rows="3">${this.escapeHtml(post?.caption || '')}</textarea>
       <div class="modal-actions">
-        <button class="btn btn-outline" onclick="App.closeModal()">${t('cancel')}</button>
-        <button class="btn btn-primary" id="save-caption">${t('save')}</button>
-      </div>`);
+        <button type="button" class="btn btn-outline" id="modal-cancel-caption">${t('cancel')}</button>
+        <button type="button" class="btn btn-primary" id="save-caption">${t('save')}</button>
+      </div>`, t('editCaption'));
+    document.getElementById('modal-cancel-caption').addEventListener('click', () => this.closeModal());
     document.getElementById('save-caption').addEventListener('click', () => {
       DB.updatePost(postId, this.state.user.id, { caption: document.getElementById('modal-caption').value.trim() });
       this.closeModal();
       this.toast(t('postUpdated'));
-      this.renderPage(this.state.page);
+      if (this.state.page === 'profile') this.renderProfileGrid();
+      else this.renderPage(this.state.page);
     });
   },
 
@@ -611,15 +707,15 @@ const App = {
   showEditProfile() {
     const u = this.state.user;
     this.showModal(`
-      <h3>${t('editProfile')}</h3>
       <div class="field"><label>${t('name')}</label><input id="ep-name" value="${this.escapeHtml(u.name)}" /></div>
       <div class="field"><label>${t('username')}</label><input id="ep-username" value="${this.escapeHtml(u.username)}" /></div>
       <div class="field"><label>${t('bio')}</label><textarea id="ep-bio" rows="2">${this.escapeHtml(u.bio || '')}</textarea></div>
       <div class="field"><label>${t('email')}</label><input id="ep-email" type="email" value="${this.escapeHtml(u.email)}" /></div>
       <div class="modal-actions">
-        <button class="btn btn-outline" onclick="App.closeModal()">${t('cancel')}</button>
-        <button class="btn btn-primary" id="save-profile">${t('save')}</button>
-      </div>`);
+        <button type="button" class="btn btn-outline" id="modal-cancel-profile">${t('cancel')}</button>
+        <button type="button" class="btn btn-primary" id="save-profile">${t('save')}</button>
+      </div>`, t('editProfile'));
+    document.getElementById('modal-cancel-profile').addEventListener('click', () => this.closeModal());
     document.getElementById('save-profile').addEventListener('click', () => {
       const username = document.getElementById('ep-username').value.trim();
       if (DB.getUserByUsername(username) && username !== u.username) {
@@ -640,11 +736,11 @@ const App = {
   },
 
   showSettings() {
-    const u = this.state.user;
+    const u = DB.getUser(this.state.user.id);
+    this.state.user = u;
     this.showModal(`
-      <h3>${t('settings')}</h3>
       <div class="settings-group">
-        <label>${t('language')}</label>
+        <label for="set-lang">${t('language')}</label>
         <select id="set-lang">
           <option value="en" ${u.language === 'en' ? 'selected' : ''}>English</option>
           <option value="zh" ${u.language === 'zh' ? 'selected' : ''}>中文简体</option>
@@ -657,27 +753,29 @@ const App = {
       <div class="settings-group">
         <label>${t('theme')} 🌙</label>
         <div class="theme-toggle">
-          <button class="btn ${u.theme === 'light' ? 'btn-primary' : 'btn-outline'}" data-theme="light">${t('bright')}</button>
-          <button class="btn ${u.theme === 'dark' ? 'btn-primary' : 'btn-outline'}" data-theme="dark">${t('dark')}</button>
+          <button type="button" class="btn ${u.theme === 'light' ? 'btn-primary' : 'btn-outline'}" data-theme="light">${t('bright')}</button>
+          <button type="button" class="btn ${u.theme === 'dark' ? 'btn-primary' : 'btn-outline'}" data-theme="dark">${t('dark')}</button>
         </div>
       </div>
       <div class="settings-group">
-        <label>🔒 ${t('privateAccount')}</label>
-        <p class="muted small">${t('lockDesc')}</p>
-        <label class="toggle-switch">
-          <input type="checkbox" id="set-private" ${u.isPrivate ? 'checked' : ''} />
-          <span class="slider"></span>
-        </label>
+        <button type="button" class="private-toggle-row ${u.isPrivate ? 'active' : ''}" id="private-toggle-btn">
+          <div class="private-toggle-label">
+            <strong>🔒 ${t('privateAccount')}</strong>
+            <p class="muted small">${t('lockDesc')}</p>
+            <p class="muted small">${t('followRequestDesc')}</p>
+          </div>
+          <span class="toggle-indicator">${u.isPrivate ? 'ON' : 'OFF'}</span>
+        </button>
       </div>
       <div class="settings-group">
         <label>${t('changePassword')}</label>
         <input id="pw-identifier" placeholder="${t('enterEmailOrPhone')}" />
-        <button class="btn btn-outline btn-block" id="send-code">${t('sendCode')}</button>
+        <button type="button" class="btn btn-outline btn-block" id="send-code">${t('sendCode')}</button>
         <input id="pw-code" placeholder="${t('verificationCode')}" />
         <input id="pw-new" type="password" placeholder="${t('newPassword')}" />
-        <button class="btn btn-primary btn-block" id="change-pw">${t('verifyAndChange')}</button>
+        <button type="button" class="btn btn-primary btn-block" id="change-pw">${t('verifyAndChange')}</button>
       </div>
-      <button class="btn btn-outline btn-block logout-btn">${t('logout')}</button>`);
+      <button type="button" class="btn btn-outline btn-block logout-btn">${t('logout')}</button>`, t('settings'));
 
     document.querySelectorAll('[data-theme]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -691,13 +789,19 @@ const App = {
     document.getElementById('set-lang').addEventListener('change', e => {
       this.state.lang = e.target.value;
       DB.updateUser(u.id, { language: e.target.value });
+      this.state.user = DB.getUser(u.id);
       this.applyI18n();
       this.renderPage(this.state.page);
+      this.toast(t('save'));
     });
 
-    document.getElementById('set-private').addEventListener('change', e => {
-      DB.updateUser(u.id, { isPrivate: e.target.checked });
+    document.getElementById('private-toggle-btn').addEventListener('click', () => {
+      const updated = DB.getUser(u.id);
+      const newVal = !updated.isPrivate;
+      DB.updateUser(u.id, { isPrivate: newVal });
       this.state.user = DB.getUser(u.id);
+      this.showSettings();
+      this.toast(newVal ? t('privateAccount') + ': ON' : t('privateAccount') + ': OFF');
     });
 
     document.getElementById('send-code').addEventListener('click', () => {
@@ -726,10 +830,31 @@ const App = {
     });
   },
 
+  showFollowList(type) {
+    const users = type === 'followers'
+      ? DB.getFollowers(this.state.user.id)
+      : DB.getFollowing(this.state.user.id);
+    const title = type === 'followers' ? t('followers') : t('followingLabel');
+    this.showModal(`
+      <div class="user-list">
+        ${users.length ? users.map(u => `
+          <button type="button" class="user-list-item" data-user="${u.id}">
+            <img src="${DB.avatarUrl(u)}" alt="" />
+            <div><strong>${this.escapeHtml(u.name)}</strong><span class="muted"> @${u.username}</span></div>
+          </button>`).join('') : `<div class="empty">${t('noResults')}</div>`}
+      </div>`, title);
+
+    document.querySelectorAll('.user-list-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.closeModal();
+        this.showUserProfile(btn.dataset.user);
+      });
+    });
+  },
+
   showProfileViews() {
     const views = DB.getProfileViews(this.state.user.id);
     this.showModal(`
-      <h3>👣 ${t('profileViews')}</h3>
       <div class="views-list">
         ${views.length ? views.map(v => `
           <div class="view-item">
@@ -737,7 +862,7 @@ const App = {
             <span><strong>${v.viewer?.name}</strong> ${t('viewedYourProfile')}</span>
             <time>${this.timeAgo(v.viewedAt)}</time>
           </div>`).join('') : `<div class="empty">${t('noResults')}</div>`}
-      </div>`);
+      </div>`, '👣 ' + t('profileViews'));
   },
 
   handleImageUpload(e, field) {
@@ -752,9 +877,16 @@ const App = {
     reader.readAsDataURL(file);
   },
 
-  showModal(html) {
-    document.getElementById('modal-content').innerHTML = html;
+  showModal(html, title) {
+    const modalTitle = title || '';
+    document.getElementById('modal-content').innerHTML = `
+      <div class="modal-header">
+        <h3>${modalTitle}</h3>
+        <button type="button" class="modal-close" id="modal-close-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">${html}</div>`;
     document.getElementById('modal-overlay').hidden = false;
+    document.getElementById('modal-close-btn').addEventListener('click', () => this.closeModal());
   },
 
   closeModal() {
