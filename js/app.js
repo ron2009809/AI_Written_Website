@@ -31,11 +31,14 @@ const App = {
   showAuth() {
     document.getElementById('auth-screen').classList.add('active');
     document.getElementById('app-screen').classList.remove('active');
+    document.getElementById('bottom-nav').hidden = true;
+    this.closeSettings();
   },
 
   showApp() {
     document.getElementById('auth-screen').classList.remove('active');
     document.getElementById('app-screen').classList.add('active');
+    document.getElementById('bottom-nav').hidden = false;
     this.renderPage(this.state.page);
     this.updateMsgBadge();
   },
@@ -63,6 +66,10 @@ const App = {
     document.getElementById('select-file-btn').textContent = t('selectFile');
     document.getElementById('publish-btn').textContent = t('publish');
     document.getElementById('notif-bar-text').textContent = t('notifications');
+    const settingsTitle = document.getElementById('settings-title');
+    if (settingsTitle && !document.getElementById('settings-overlay').hidden) {
+      settingsTitle.textContent = t('settings');
+    }
     const msgHeading = document.getElementById('messages-heading');
     if (msgHeading) msgHeading.textContent = t('messages');
     document.getElementById('edit-profile-btn').textContent = t('editProfile');
@@ -241,6 +248,15 @@ const App = {
 
     document.getElementById('modal-overlay').addEventListener('click', e => {
       if (e.target.id === 'modal-overlay') this.closeModal();
+    });
+
+    document.getElementById('settings-close').addEventListener('click', () => this.closeSettings());
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (!document.getElementById('settings-overlay').hidden) this.closeSettings();
+        else if (!document.getElementById('modal-overlay').hidden) this.closeModal();
+      }
     });
   },
 
@@ -738,17 +754,25 @@ const App = {
   showSettings() {
     const u = DB.getUser(this.state.user.id);
     this.state.user = u;
-    this.showModal(`
+    document.getElementById('settings-title').textContent = t('settings');
+
+    const langs = [
+      { code: 'en', label: 'English' },
+      { code: 'zh', label: '中文简体' },
+      { code: 'ko', label: '한국어' },
+      { code: 'ja', label: '日本語' },
+      { code: 'es', label: 'Español' },
+      { code: 'fr', label: 'Français' }
+    ];
+
+    document.getElementById('settings-body').innerHTML = `
       <div class="settings-group">
-        <label for="set-lang">${t('language')}</label>
-        <select id="set-lang">
-          <option value="en" ${u.language === 'en' ? 'selected' : ''}>English</option>
-          <option value="zh" ${u.language === 'zh' ? 'selected' : ''}>中文简体</option>
-          <option value="ko" ${u.language === 'ko' ? 'selected' : ''}>한국어</option>
-          <option value="ja" ${u.language === 'ja' ? 'selected' : ''}>日本語</option>
-          <option value="es" ${u.language === 'es' ? 'selected' : ''}>Español</option>
-          <option value="fr" ${u.language === 'fr' ? 'selected' : ''}>Français</option>
-        </select>
+        <label>${t('language')}</label>
+        <div class="lang-grid" id="lang-grid">
+          ${langs.map(l => `
+            <button type="button" class="lang-btn ${u.language === l.code ? 'active' : ''}" data-lang="${l.code}">${l.label}</button>
+          `).join('')}
+        </div>
       </div>
       <div class="settings-group">
         <label>${t('theme')} 🌙</label>
@@ -775,9 +799,12 @@ const App = {
         <input id="pw-new" type="password" placeholder="${t('newPassword')}" />
         <button type="button" class="btn btn-primary btn-block" id="change-pw">${t('verifyAndChange')}</button>
       </div>
-      <button type="button" class="btn btn-outline btn-block logout-btn">${t('logout')}</button>`, t('settings'));
+      <button type="button" class="btn btn-outline btn-block logout-btn">${t('logout')}</button>`;
 
-    document.querySelectorAll('[data-theme]').forEach(btn => {
+    document.getElementById('settings-overlay').hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    document.querySelectorAll('#settings-body [data-theme]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.state.theme = btn.dataset.theme;
         DB.updateUser(u.id, { theme: btn.dataset.theme });
@@ -786,13 +813,17 @@ const App = {
       });
     });
 
-    document.getElementById('set-lang').addEventListener('change', e => {
-      this.state.lang = e.target.value;
-      DB.updateUser(u.id, { language: e.target.value });
-      this.state.user = DB.getUser(u.id);
-      this.applyI18n();
-      this.renderPage(this.state.page);
-      this.toast(t('save'));
+    document.querySelectorAll('#settings-body .lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        this.state.lang = lang;
+        DB.updateUser(u.id, { language: lang });
+        this.state.user = DB.getUser(u.id);
+        this.applyI18n();
+        this.renderPage(this.state.page);
+        this.showSettings();
+        this.toast(t('save'));
+      });
     });
 
     document.getElementById('private-toggle-btn').addEventListener('click', () => {
@@ -825,9 +856,15 @@ const App = {
     document.querySelector('.logout-btn').addEventListener('click', () => {
       DB.setCurrentUser(null);
       this.state.user = null;
-      this.closeModal();
+      this.closeSettings();
       this.showAuth();
     });
+  },
+
+  closeSettings() {
+    const overlay = document.getElementById('settings-overlay');
+    if (overlay) overlay.hidden = true;
+    document.body.style.overflow = '';
   },
 
   showFollowList(type) {
@@ -886,7 +923,13 @@ const App = {
       </div>
       <div class="modal-body">${html}</div>`;
     document.getElementById('modal-overlay').hidden = false;
-    document.getElementById('modal-close-btn').addEventListener('click', () => this.closeModal());
+    const closeBtn = document.getElementById('modal-close-btn');
+    closeBtn.onclick = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.closeModal();
+    };
+    document.getElementById('modal-content').onclick = e => e.stopPropagation();
   },
 
   closeModal() {
