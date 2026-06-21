@@ -17,6 +17,8 @@
   --radius-sm: 8px;
   --nav-height: 64px;
   --header-height: 56px;
+  --content-max: 520px;
+  --page-padding: 24px;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --transition: 200ms ease;
 }
@@ -160,22 +162,21 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 
 .app-shell {
   width: 100%;
-  max-width: 680px;
+  max-width: calc(var(--content-max) + var(--page-padding) * 2);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--page-padding);
 }
 
 .app-header {
   position: sticky; top: 0; z-index: 50;
   height: var(--header-height);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 4px;
-  margin: 0 -4px;
+  padding: 0 8px;
   background: var(--bg-elevated);
   border-bottom: 1px solid var(--border);
 }
 
-.page-title { font-size: 18px; font-weight: 700; }
+.page-title { font-size: 18px; font-weight: 700; padding-left: 4px; }
 .header-actions { display: flex; gap: 8px; }
 
 .icon-btn {
@@ -190,9 +191,11 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .app-main {
   flex: 1;
   width: 100%;
-  padding: 0 0 16px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 8px 0 20px;
 }
-.page { display: none; padding: 0; }
+.page { display: none; padding: 0 4px; }
 .page.active { display: block; }
 
 /* Bottom nav — full screen width */
@@ -236,12 +239,21 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 
 /* Feed & Posts */
-.feed { display: flex; flex-direction: column; }
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
 
 .post-card {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px 14px;
+  margin-bottom: 0;
+  background: var(--bg-elevated);
+  overflow: hidden;
 }
 
 .post-header {
@@ -264,8 +276,15 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 
 .follow-btn.following { background: var(--bg-secondary); color: var(--text-muted); }
 
+.post-media {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
 .post-media img, .post-media video {
-  width: 100%; max-height: 500px; object-fit: cover;
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
   background: var(--bg-secondary);
 }
 
@@ -305,8 +324,8 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 
 /* Upload */
-.upload-panel { padding: 20px 0; }
-.upload-panel h3 { margin-bottom: 16px; font-size: 18px; }
+.upload-panel { padding: 20px 4px; }
+.upload-panel h3 { margin-bottom: 16px; font-size: 18px; padding-left: 4px; }
 
 .upload-preview {
   width: 100%; aspect-ratio: 1;
@@ -323,8 +342,8 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 #select-file-btn { margin-bottom: 16px; width: 100%; }
 
 /* Messages */
-.msg-section { padding: 0 0 16px; }
-.msg-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding-top: 8px; }
+.msg-section { padding: 0 4px 16px; }
+.msg-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding-top: 8px; padding-left: 4px; }
 
 .notif-bar {
   display: flex; align-items: center; gap: 12px;
@@ -429,18 +448,34 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 
 /* Profile */
-.profile-page { position: relative; }
+.profile-page { position: relative; padding-top: 4px; }
 
 .profile-header-bar {
-  position: absolute; top: 12px; right: 16px;
-  display: flex; gap: 8px; z-index: 10;
+  position: absolute; top: 12px; right: 12px;
+  display: flex; gap: 8px; z-index: 30;
+  pointer-events: auto;
+}
+
+.profile-action-btn {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
+  pointer-events: auto;
+  position: relative;
+  z-index: 31;
+}
+[data-theme="dark"] .profile-action-btn {
+  background: rgba(30, 41, 59, 0.92);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .profile-cover {
-  height: 140px;
+  height: 130px;
   background: linear-gradient(135deg, var(--primary), #a855f7);
   background-size: cover; background-position: center;
   position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .cover-upload {
@@ -454,7 +489,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 }
 .cover-upload:hover { background: rgba(0,0,0,.75); }
 
-.profile-info { padding: 0 0 16px; margin-top: -40px; position: relative; }
+.profile-info { padding: 0 8px 16px; margin-top: -40px; position: relative; }
 
 .profile-avatar-wrap { position: relative; width: 88px; margin-bottom: 12px; }
 
@@ -523,7 +558,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .profile-post-detail[hidden] { display: none !important; }
 .profile-post-detail .post-card { border-bottom: none; margin-bottom: 0; }
 .profile-post-detail .post-media img,
-.profile-post-detail .post-media video { max-height: 420px; }
+.profile-post-detail .post-media video { max-height: 300px; }
 
 .grid-item {
   aspect-ratio: 1; overflow: hidden; cursor: pointer;
@@ -580,13 +615,15 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .settings-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1200;
+  z-index: 9999;
   background: var(--bg);
-  display: flex;
+  display: none;
   flex-direction: column;
   pointer-events: auto;
 }
-.settings-overlay[hidden] { display: none !important; }
+.settings-overlay.is-open {
+  display: flex !important;
+}
 
 .settings-header {
   display: flex;
@@ -618,8 +655,8 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .settings-body {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
-  max-width: 680px;
+  padding: 24px var(--page-padding) calc(24px + env(safe-area-inset-bottom));
+  max-width: calc(var(--content-max) + 80px);
   margin: 0 auto;
   width: 100%;
 }
@@ -762,6 +799,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 .empty {
   text-align: center; padding: 48px 24px;
   color: var(--text-muted); font-size: 14px;
+  margin: 0 4px;
 }
 
 /* Toast */
@@ -784,17 +822,11 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
   :root {
     --nav-height: 72px;
     --header-height: 60px;
+    --content-max: 560px;
+    --page-padding: 32px;
   }
 
-  .app-shell {
-    max-width: 760px;
-    padding: 0 32px;
-  }
-
-  .settings-body {
-    max-width: 760px;
-    padding: 32px 32px 48px;
-  }
+  .auth-container { padding: 40px 36px; }
 
   .nav-item {
     flex-direction: row;
@@ -805,35 +837,33 @@ button { cursor: pointer; border: none; background: none; color: inherit; }
 
   .nav-item svg { width: 24px; height: 24px; }
 
-  .post-media img, .post-media video { max-height: 560px; }
+  .post-media img, .post-media video { max-height: 360px; }
 
-  .upload-preview { max-width: 480px; margin-left: auto; margin-right: auto; }
+  .upload-preview { max-width: 400px; margin-left: auto; margin-right: auto; }
 
   .profile-grid { grid-template-columns: repeat(4, 1fr); }
 
-  .auth-container { padding: 40px 36px; }
+  .lang-grid { grid-template-columns: repeat(3, 1fr); }
 
   .profile-content.has-detail .profile-grid { flex: 0 0 45%; }
   .profile-content.has-detail .profile-post-detail { flex: 1; display: block !important; }
 }
 
 @media (min-width: 1200px) {
-  .app-shell {
-    max-width: 900px;
-    padding: 0 40px;
+  :root {
+    --content-max: 580px;
+    --page-padding: 40px;
   }
 
-  .settings-body { max-width: 900px; }
-
-  .post-media img, .post-media video { max-height: 640px; }
+  .post-media img, .post-media video { max-height: 380px; }
 
   .profile-content.has-detail .profile-grid {
-    flex: 0 0 380px;
+    flex: 0 0 240px;
     grid-template-columns: repeat(3, 1fr);
   }
 
   .profile-post-detail .post-media img,
-  .profile-post-detail .post-media video { max-height: 520px; }
+  .profile-post-detail .post-media video { max-height: 320px; }
 }
 
 @media (max-width: 640px) {

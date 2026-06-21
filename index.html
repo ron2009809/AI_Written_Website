@@ -6,7 +6,7 @@
   <meta name="description" content="ConnectHub - Modern social media platform" />
   <meta name="theme-color" content="#6366f1" />
   <title>ConnectHub</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=3" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -153,11 +153,11 @@
 
       <!-- Profile -->
       <section id="page-profile" class="page profile-page">
-        <div class="profile-header-bar">
-          <button class="icon-btn" id="btn-views" title="Profile views">👣</button>
-          <button class="icon-btn" id="btn-settings" title="Settings">⚙</button>
-        </div>
         <div class="profile-cover" id="profile-cover">
+          <div class="profile-header-bar">
+            <button type="button" class="icon-btn profile-action-btn" id="btn-views" title="Profile views">👣</button>
+            <button type="button" class="icon-btn profile-action-btn" id="btn-settings" title="Settings">⚙</button>
+          </div>
           <button type="button" class="cover-upload" id="cover-upload-btn" aria-label="Change cover">+</button>
           <input type="file" id="cover-input" accept="image/*" hidden />
         </div>
@@ -248,8 +248,8 @@
 
   <div class="toast" id="toast" hidden></div>
 
-  <script src="js/db.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/db.js?v=3"></script>
+  <script src="js/i18n.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>

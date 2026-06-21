@@ -67,7 +67,7 @@ const App = {
     document.getElementById('publish-btn').textContent = t('publish');
     document.getElementById('notif-bar-text').textContent = t('notifications');
     const settingsTitle = document.getElementById('settings-title');
-    if (settingsTitle && !document.getElementById('settings-overlay').hidden) {
+    if (settingsTitle && document.getElementById('settings-overlay')?.classList.contains('is-open')) {
       settingsTitle.textContent = t('settings');
     }
     const msgHeading = document.getElementById('messages-heading');
@@ -214,8 +214,20 @@ const App = {
     });
 
     document.getElementById('edit-profile-btn').addEventListener('click', () => this.showEditProfile());
-    document.getElementById('btn-settings').addEventListener('click', () => this.showSettings());
-    document.getElementById('btn-views').addEventListener('click', () => this.showProfileViews());
+
+    document.addEventListener('click', e => {
+      const settingsBtn = e.target.closest('#btn-settings');
+      if (settingsBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.showSettings();
+      }
+    });
+
+    document.getElementById('btn-views').addEventListener('click', e => {
+      e.stopPropagation();
+      this.showProfileViews();
+    });
 
     document.getElementById('avatar-input').addEventListener('change', e => this.handleImageUpload(e, 'avatar'));
     document.getElementById('cover-upload-btn').addEventListener('click', () => {
@@ -250,11 +262,15 @@ const App = {
       if (e.target.id === 'modal-overlay') this.closeModal();
     });
 
-    document.getElementById('settings-close').addEventListener('click', () => this.closeSettings());
+    document.getElementById('settings-close').addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.closeSettings();
+    });
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        if (!document.getElementById('settings-overlay').hidden) this.closeSettings();
+        if (document.getElementById('settings-overlay')?.classList.contains('is-open')) this.closeSettings();
         else if (!document.getElementById('modal-overlay').hidden) this.closeModal();
       }
     });
@@ -752,7 +768,12 @@ const App = {
   },
 
   showSettings() {
+    if (!this.state.user) {
+      this.toast(t('loginError'));
+      return;
+    }
     const u = DB.getUser(this.state.user.id);
+    if (!u) return;
     this.state.user = u;
     document.getElementById('settings-title').textContent = t('settings');
 
@@ -801,8 +822,11 @@ const App = {
       </div>
       <button type="button" class="btn btn-outline btn-block logout-btn">${t('logout')}</button>`;
 
-    document.getElementById('settings-overlay').hidden = false;
+    const overlay = document.getElementById('settings-overlay');
+    overlay.removeAttribute('hidden');
+    overlay.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    overlay.scrollTop = 0;
 
     document.querySelectorAll('#settings-body [data-theme]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -863,7 +887,9 @@ const App = {
 
   closeSettings() {
     const overlay = document.getElementById('settings-overlay');
-    if (overlay) overlay.hidden = true;
+    if (!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('hidden', '');
     document.body.style.overflow = '';
   },
 
