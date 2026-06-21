@@ -4,8 +4,8 @@ A modern, responsive social media web app with login/signup, feed, friends, mess
 
 ## Live Demo
 
-- **GitHub Pages:** https://ron2009809.github.io/connecthub/
-- **Netlify:** Deploy via Netlify (see below)
+- **GitHub Pages:** https://ron2009809.github.io/AI_Written_Website/
+- **Netlify:** https://delicate-halva-13064c.netlify.app/ (anonymous deploy password: `My-Drop-Site` — claim the site on Netlify to remove the password)
 
 ## Demo Account
 
